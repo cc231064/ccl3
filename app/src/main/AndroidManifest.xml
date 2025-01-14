@@ -24,6 +24,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="android:allowBackup"
+            android:value="true" />
+
+        <!-- Control backup behavior -->
+        <meta-data
+            android:name="android:fullBackupContent"
+            android:value="@xml/backup_rules" />
+
     </application>
 
 </manifest>
