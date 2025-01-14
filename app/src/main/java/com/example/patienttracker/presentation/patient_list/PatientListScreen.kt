@@ -69,7 +69,7 @@ fun ListAppBar() {
     TopAppBar(
         title = {
             Text(
-                text = "Patient Tracker",
+                text = "PatientEase!",
                 style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
             )
         }
