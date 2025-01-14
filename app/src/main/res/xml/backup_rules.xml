@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <full-backup-content>
     <include domain="file" path="." /> <!-- Include everything by default -->
-    <exclude domain="file" path="path/to/excluded_directory/" /> <!-- Exclude specific directory -->
-    <exclude domain="file" path="path/to/excluded_file.txt" /> <!-- Exclude specific file -->
+
+    <!-- Exclude specific directories and files -->
+    <exclude domain="file" path="build/" />
+    <exclude domain="file" path="app/src/main/res/values/secret.xml" />
+    <exclude domain="file" path="app/src/main/tmp/" />
+    <exclude domain="file" path="app/src/main/res/raw/large_media_file.mp4" />
+    <exclude domain="file" path="app/src/main/data/user_preferences/" />
 </full-backup-content>
