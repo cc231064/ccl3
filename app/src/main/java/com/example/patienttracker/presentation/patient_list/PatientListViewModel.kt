@@ -1,46 +1,3 @@
-/*package com.example.patienttracker.presentation.patient_list
-
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.patienttracker.domain.model.Patient
-import com.example.patienttracker.domain.repository.PatientRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
-
-@HiltViewModel
-class PatientListViewModel @Inject constructor(
-    private val repository: PatientRepository
-) : ViewModel() {
-
-    private var _patientList = MutableStateFlow<List<Patient>>(emptyList())
-    val patientList = _patientList.asStateFlow()
-
-    var isLoading by mutableStateOf(false)
-
-    init {
-        viewModelScope.launch {
-            isLoading = true
-            repository.getAllPatients().collect {
-                _patientList.value = it
-            }
-            isLoading = false
-        }
-    }
-
-    fun deletePatient(patient: Patient) {
-        viewModelScope.launch {
-            repository.deletePatient(patient)
-        }
-    }
-}
-*/
-
 package com.example.patienttracker.presentation.patient_list
 
 import androidx.compose.runtime.getValue
@@ -51,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.patienttracker.domain.model.Patient
 import com.example.patienttracker.domain.repository.PatientRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -63,17 +21,19 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// ViewModel for the patient list screen
 @HiltViewModel
 class PatientListViewModel @Inject constructor(
-    private val repository: PatientRepository
+    private val repository: PatientRepository // Repository for patient data
 ) : ViewModel() {
 
-    private val _searchQuery = MutableStateFlow("")
+    private val _searchQuery = MutableStateFlow("") // Search query state
     val searchQuery = _searchQuery.asStateFlow()
 
-    private val _patientList = MutableStateFlow<List<Patient>>(emptyList())
+    private val _patientList = MutableStateFlow<List<Patient>>(emptyList()) // Patient list state
 
-    @OptIn(FlowPreview::class)
+    // Filtered patient list based on search query
+    @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     val patientList: StateFlow<List<Patient>> = _searchQuery
         .debounce(500)
         .flatMapLatest { query ->
@@ -95,8 +55,9 @@ class PatientListViewModel @Inject constructor(
         )
 
 
-    var isLoading by mutableStateOf(false)
+    var isLoading by mutableStateOf(false) // Loading state
 
+    // Initialize data
     init {
         viewModelScope.launch {
             isLoading = true
@@ -107,12 +68,14 @@ class PatientListViewModel @Inject constructor(
         }
     }
 
+    // Delete a patient
     fun deletePatient(patient: Patient) {
         viewModelScope.launch {
             repository.deletePatient(patient)
         }
     }
 
+    // Update search query
     fun onSearchQueryChange(query: String) {
         _searchQuery.value = query
     }

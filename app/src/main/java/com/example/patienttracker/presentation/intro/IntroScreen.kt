@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 
+// IntroScreen composable function
 @Composable
 fun IntroScreen(onContinueClick: () -> Unit) {
     Column(

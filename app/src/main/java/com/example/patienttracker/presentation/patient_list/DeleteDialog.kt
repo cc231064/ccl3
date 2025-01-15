@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 
+// Delete confirmation dialog
 @Composable
 fun DeleteDialog(
     title: String,

@@ -11,6 +11,7 @@ import com.example.patienttracker.presentation.patient_details.PatientDetailsScr
 import com.example.patienttracker.presentation.patient_list.PatientListScreen
 import com.example.patienttracker.util.Constants.PATIENT_DETAILS_ARGUMENT_KEY
 
+// Defines the navigation routes
 sealed class Screen(val route: String) {
     object IntroScreen : Screen("intro_screen")
     object PatientList : Screen("patient_list_screen")
@@ -24,9 +25,10 @@ sealed class Screen(val route: String) {
     }
 }
 
+// Sets up the navigation graph
 @Composable
 fun NavGraphSetup(
-    navController: NavHostController
+    navController: NavHostController // Navigation controller
 ) {
     NavHost(
         navController = navController,

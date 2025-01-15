@@ -12,26 +12,29 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// Hilt module for dependency injection
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    // Provides the PatientDatabase instance
     @Provides
     @Singleton
     fun providePatientDatabase(
-        app: Application
+        app: Application // Application context
     ): PatientDatabase {
         return Room.databaseBuilder(
             app,
             PatientDatabase::class.java,
-            PATIENT_DATABASE
+            PATIENT_DATABASE // Database name
         ).build()
     }
 
+    // Provides the PatientRepository instance
     @Provides
     @Singleton
     fun providePatientRepository(
-        db: PatientDatabase
+        db: PatientDatabase // PatientDatabase instance
     ): PatientRepository {
         return PatientRepositoryImpl(db.patientDao)
     }

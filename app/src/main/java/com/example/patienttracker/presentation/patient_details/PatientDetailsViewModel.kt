@@ -15,49 +15,65 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// ViewModel for the Patient Details screen
 @HiltViewModel
 class PatientDetailsViewModel @Inject constructor(
-    private val repository: PatientRepository,
-    private val savedStateHandle: SavedStateHandle
+    private val repository: PatientRepository, // Repository for patient data
+    private val savedStateHandle: SavedStateHandle // Handle to save and retrieve state
 ): ViewModel() {
 
+    // State to hold the UI data for the patient details screen
     var state by mutableStateOf(PatientDetailsUiState())
 
+    // Shared flow to emit UI events (like showing a toast or navigating)
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
+    // Variable to hold the current patient ID
     private var currentPatientId: Int? = null
 
+    // Initialize the ViewModel by fetching patient details
     init {
         fetchPatientDetails()
     }
 
+    // Function to handle UI actions
     fun onAction(event: PatientDetailsEvent) {
         when(event) {
+            // Update the name in the state
             is PatientDetailsEvent.EnteredName -> {
                 state = state.copy(name = event.name)
             }
+            // Update the age in the state
             is PatientDetailsEvent.EnteredAge -> {
                 state = state.copy(age = event.age)
             }
+            // Update the assigned doctor in the state
             is PatientDetailsEvent.EnteredAssignedDoctor -> {
                 state = state.copy(doctorAssigned = event.doctor)
             }
+            // Update the prescription in the state
             is PatientDetailsEvent.EnteredPrescription -> {
                 state = state.copy(prescription = event.prescription)
             }
+            // Update the gender to female in the state
             PatientDetailsEvent.SelectedFemale -> {
                 state = state.copy(gender = 2)
             }
+            // Update the gender to male in the state
             PatientDetailsEvent.SelectedMale -> {
                 state = state.copy(gender = 1)
             }
+            // Handle the save button click
             PatientDetailsEvent.SaveButton -> {
                 viewModelScope.launch {
                     try {
+                        // Save the patient details
                         savePatient()
+                        // Emit a save note event
                         _eventFlow.emit(UiEvent.SaveNote)
                     } catch (e: Exception) {
+                        // Emit a show toast event with the error message
                         _eventFlow.emit(
                             UiEvent.ShowToast(
                                 message = e.message ?: "Couldn't save patient's details."
@@ -69,8 +85,10 @@ class PatientDetailsViewModel @Inject constructor(
         }
     }
 
+    // Function to save the patient details
     private fun savePatient() {
         val age = state.age.toIntOrNull()
+        // Validate the input fields
         when {
             state.name.isEmpty() -> throw TextFieldException("Please enter name.")
             state.age.isEmpty() -> throw TextFieldException("Please enter age.")
@@ -81,6 +99,7 @@ class PatientDetailsViewModel @Inject constructor(
         }
         val trimmedName = state.name.trim()
         val trimmedDoctorName = state.doctorAssigned.trim()
+        // Launch a coroutine to save the patient details
         viewModelScope.launch {
             repository.addOrUpdatePatient(
                 patient = Patient(
@@ -95,11 +114,13 @@ class PatientDetailsViewModel @Inject constructor(
         }
     }
 
+    // Function to fetch patient details based on the patient ID
     private fun fetchPatientDetails() {
         savedStateHandle.get<Int>(key = PATIENT_DETAILS_ARGUMENT_KEY)?.let { patientId ->
             if (patientId != -1) {
                 viewModelScope.launch {
                     repository.getPatientById(patientId)?.apply {
+                        // Update the state with the fetched patient details
                         state = state.copy(
                             name = name,
                             age = age,
@@ -114,12 +135,15 @@ class PatientDetailsViewModel @Inject constructor(
         }
     }
 
+    // Sealed class to represent UI events
     sealed class UiEvent {
+        // Data class to represent a show toast event
         data class ShowToast(val message: String): UiEvent()
+        // Object to represent a save note event
         object SaveNote : UiEvent()
     }
 
 }
 
+// Custom exception for text field validation
 class TextFieldException(message: String?): Exception(message)
-

@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
+// Patient list screen
 @Composable
 fun PatientListScreen(
     onFabClick: () -> Unit,
@@ -51,6 +52,7 @@ fun PatientListScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            // Search text field
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -66,6 +68,7 @@ fun PatientListScreen(
                     )
                 }
             )
+            // Patient list
             LazyColumn(
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.fillMaxSize(),
@@ -79,6 +82,7 @@ fun PatientListScreen(
                     )
                 }
             }
+            // Empty list message
             if (patientList.isEmpty() && !viewModel.isLoading) {
                 Box(
                     modifier = Modifier
@@ -96,6 +100,7 @@ fun PatientListScreen(
     }
 }
 
+// Top app bar
 @Composable
 fun ListAppBar() {
     TopAppBar(
@@ -108,6 +113,7 @@ fun ListAppBar() {
     )
 }
 
+// Floating action button
 @Composable
 fun ListFab(
     onFabClick: () -> Unit

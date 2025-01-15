@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
+// Patient details screen
 @Composable
 fun PatientDetailsScreen(
     onBackClick: () -> Unit,
@@ -35,9 +36,9 @@ fun PatientDetailsScreen(
 
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-
     val context = LocalContext.current
 
+    // Collect UI events
     LaunchedEffect(key1 = Unit) {
         viewModel.eventFlow.collectLatest { event ->
             when(event) {
@@ -52,6 +53,7 @@ fun PatientDetailsScreen(
         }
     }
 
+    // Request focus on the first text field
     LaunchedEffect(key1 = Unit) {
         delay(500)
         focusRequester.requestFocus()
@@ -70,6 +72,7 @@ fun PatientDetailsScreen(
                 .padding(16.dp)
                 .padding(it)
         ) {
+            // Name text field
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -79,20 +82,17 @@ fun PatientDetailsScreen(
                     viewModel.onAction(PatientDetailsEvent.EnteredName(newValue))
                 },
                 label = { Text(text = "Name") },
-                textStyle = MaterialTheme.typography.body1,
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Next) }
-                )
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) })
             )
             Spacer(modifier = Modifier.height(10.dp))
+            // Age and gender row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Age text field
                 OutlinedTextField(
                     modifier = Modifier.weight(1f),
                     value = state.age,
@@ -100,23 +100,19 @@ fun PatientDetailsScreen(
                         viewModel.onAction(PatientDetailsEvent.EnteredAge(newValue))
                     },
                     label = { Text(text = "Age") },
-                    textStyle = MaterialTheme.typography.body1,
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Next
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onNext = { focusManager.moveFocus(FocusDirection.Next) }
-                    )
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) })
                 )
                 Spacer(modifier = Modifier.width(10.dp))
+                // Male radio button
                 RadioGroup(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Male",
                     selected = state.gender == 1,
                     onClick = { viewModel.onAction(PatientDetailsEvent.SelectedMale) }
                 )
+                // Female radio button
                 RadioGroup(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Female",
@@ -125,6 +121,7 @@ fun PatientDetailsScreen(
                 )
             }
             Spacer(modifier = Modifier.height(10.dp))
+            // Assigned doctor text field
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = state.doctorAssigned,
@@ -132,16 +129,12 @@ fun PatientDetailsScreen(
                     viewModel.onAction(PatientDetailsEvent.EnteredAssignedDoctor(newValue))
                 },
                 label = { Text(text = "Assigned Doctor's Name") },
-                textStyle = MaterialTheme.typography.body1,
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Next) }
-                )
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) })
             )
             Spacer(modifier = Modifier.height(10.dp))
+            // Prescription text field
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -151,9 +144,9 @@ fun PatientDetailsScreen(
                     viewModel.onAction(PatientDetailsEvent.EnteredPrescription(newValue))
                 },
                 label = { Text(text = "Prescription") },
-                textStyle = MaterialTheme.typography.body1,
             )
             Spacer(modifier = Modifier.height(10.dp))
+            // Save button
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { viewModel.onAction(PatientDetailsEvent.SaveButton) }
@@ -168,6 +161,7 @@ fun PatientDetailsScreen(
     }
 }
 
+// Top app bar
 @Composable
 fun TopBar(
     onBackClick: () -> Unit
@@ -190,6 +184,7 @@ fun TopBar(
     )
 }
 
+// Radio button group
 @Composable
 private fun RadioGroup(
     modifier: Modifier = Modifier,
@@ -204,9 +199,7 @@ private fun RadioGroup(
         RadioButton(
             selected = selected,
             onClick = onClick,
-            colors = RadioButtonDefaults.colors(
-                selectedColor = MaterialTheme.colors.primary
-            )
+            colors = RadioButtonDefaults.colors(selectedColor = MaterialTheme.colors.primary)
         )
         Text(
             text = text,
