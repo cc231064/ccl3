@@ -104,8 +104,10 @@ fun PatientDetailsScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
                     keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) })
                 )
+
                 Spacer(modifier = Modifier.width(10.dp))
                 // Male radio button
+
                 RadioGroup(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Male",
@@ -120,6 +122,26 @@ fun PatientDetailsScreen(
                     onClick = { viewModel.onAction(PatientDetailsEvent.SelectedFemale) }
                 )
             }
+
+            Spacer(modifier = Modifier.width(10.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = state.weight,
+                onValueChange = { newValue ->
+                    viewModel.onAction(PatientDetailsEvent.EnteredWeight(newValue))
+                },
+                label = { Text(text = "Weight (kg)") },
+                textStyle = MaterialTheme.typography.body1,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Next) }
+                )
+            )
+
             Spacer(modifier = Modifier.height(10.dp))
             // Assigned doctor text field
             OutlinedTextField(
@@ -149,7 +171,8 @@ fun PatientDetailsScreen(
             // Save button
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { viewModel.onAction(PatientDetailsEvent.SaveButton) }
+                onClick = {  val weight = state.weight.toIntOrNull() ?: 0
+                    viewModel.onAction(PatientDetailsEvent.SaveButton(weight)) }
             ) {
                 Text(
                     text = "Save",

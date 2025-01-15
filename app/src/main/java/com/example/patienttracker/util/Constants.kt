@@ -8,4 +8,6 @@ object Constants {
     const val PATIENT_TABLE = "patient_table"
     // Name of the patient database
     const val PATIENT_DATABASE = "patient_db"
+
+    const val PROFILE_TABLE = "profile_table"
 }

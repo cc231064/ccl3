@@ -8,6 +8,7 @@ import com.example.patienttracker.util.Constants.PATIENT_TABLE
 data class Patient(
     val name: String,
     val age: String,
+    val weight: String,
     val gender: Int,
     val doctorAssigned: String,
     val prescription: String,

@@ -11,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import com.example.patienttracker.data.local.PatientMigrations
 
 // Hilt module for dependency injection
 @Module
@@ -24,10 +25,12 @@ object AppModule {
         app: Application // Application context
     ): PatientDatabase {
         return Room.databaseBuilder(
-            app,
+            app.applicationContext,
             PatientDatabase::class.java,
+
             PATIENT_DATABASE // Database name
-        ).build()
+        ).addMigrations(PatientMigrations.MIGRATION_1_2)
+            .build()
     }
 
     // Provides the PatientRepository instance

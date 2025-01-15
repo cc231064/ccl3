@@ -48,7 +48,12 @@ class PatientDetailsViewModel @Inject constructor(
             is PatientDetailsEvent.EnteredAge -> {
                 state = state.copy(age = event.age)
             }
-            // Update the assigned doctor in the state
+
+
+            is PatientDetailsEvent.EnteredWeight -> {
+                state = state.copy(weight = event.weight)
+            }
+// Update the assigned doctor in the state
             is PatientDetailsEvent.EnteredAssignedDoctor -> {
                 state = state.copy(doctorAssigned = event.doctor)
             }
@@ -64,13 +69,10 @@ class PatientDetailsViewModel @Inject constructor(
             PatientDetailsEvent.SelectedMale -> {
                 state = state.copy(gender = 1)
             }
-            // Handle the save button click
-            PatientDetailsEvent.SaveButton -> {
+            is PatientDetailsEvent.SaveButton -> {
                 viewModelScope.launch {
                     try {
-                        // Save the patient details
-                        savePatient()
-                        // Emit a save note event
+                        savePatient(event.weight)
                         _eventFlow.emit(UiEvent.SaveNote)
                     } catch (e: Exception) {
                         // Emit a show toast event with the error message
@@ -85,8 +87,9 @@ class PatientDetailsViewModel @Inject constructor(
         }
     }
 
+
     // Function to save the patient details
-    private fun savePatient() {
+    private fun savePatient(weight: Int) {
         val age = state.age.toIntOrNull()
         // Validate the input fields
         when {
@@ -106,6 +109,7 @@ class PatientDetailsViewModel @Inject constructor(
                     name = trimmedName,
                     age = state.age,
                     gender = state.gender,
+                    weight = weight.toString(),
                     doctorAssigned = trimmedDoctorName,
                     prescription = state.prescription,
                     patientId = currentPatientId
@@ -124,6 +128,7 @@ class PatientDetailsViewModel @Inject constructor(
                         state = state.copy(
                             name = name,
                             age = age,
+                            weight = weight,
                             gender = gender,
                             doctorAssigned = doctorAssigned,
                             prescription = prescription
