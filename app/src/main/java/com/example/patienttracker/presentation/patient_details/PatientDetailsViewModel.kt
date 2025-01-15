@@ -95,6 +95,7 @@ class PatientDetailsViewModel @Inject constructor(
         when {
             state.name.isEmpty() -> throw TextFieldException("Please enter name.")
             state.age.isEmpty() -> throw TextFieldException("Please enter age.")
+            state.weight.isEmpty() -> throw TextFieldException("Please enter weight.")
             state.gender == 0 -> throw TextFieldException("Please select gender")
             state.doctorAssigned.isEmpty() -> throw TextFieldException("Please enter doctor assigned.")
             state.prescription.isEmpty() -> throw TextFieldException("Please enter prescription.")
