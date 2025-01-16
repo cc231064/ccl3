@@ -1,4 +1,4 @@
-// THIS FILE CURRENTLY DOES NOT WORK. PLEASE IGNORE. I COULDN'T GET IT TO WORK.
+/* THIS FILE CURRENTLY DOES NOT WORK. PLEASE IGNORE. I COULDN'T GET IT TO WORK.
 
 package com.example.patienttracker.util
 
@@ -20,3 +20,5 @@ class Converters {
         return date?.time
     }
 }
+
+ */
