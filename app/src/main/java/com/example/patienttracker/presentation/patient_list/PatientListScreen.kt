@@ -9,91 +9,128 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ModalDrawer
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import kotlinx.coroutines.launch
 
 // Patient list screen
 @Composable
 fun PatientListScreen(
-    onFabClick: () -> Unit,
-    onItemClick: (Int?) -> Unit,
+    onFabClick: (Boolean) -> Unit,
+    onItemClick: (Int?, Boolean) -> Unit,
     viewModel: PatientListViewModel = hiltViewModel()
 ) {
 
     val patientList by viewModel.patientList.collectAsState()
     val searchQuery by viewModel.searchQuery.collectAsState()
+    val currentSortOption by viewModel.currentSortOption.collectAsState()
 
-    Scaffold(
-        topBar = { ListAppBar() },
-        floatingActionButton = {
-            ListFab(onFabClick = onFabClick)
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            // Search text field
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                value = searchQuery,
-                onValueChange = { viewModel.onSearchQueryChange(it) },
-                label = { Text(text = "Search Patient") },
-                singleLine = true,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Search Icon"
-                    )
+    // State for the drawer
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(patientList) {
+        println("PatientListScreen: patientList changed: $patientList")
+    }
+
+    ModalDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            SortDrawer(
+                currentSortOption = currentSortOption,
+                onSortOptionChange = {
+                    viewModel.onSortOptionChange(it)
+                    scope.launch { drawerState.close() }
                 }
             )
-            // Patient list
-            LazyColumn(
-                contentPadding = PaddingValues(horizontal = 16.dp),
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                items(patientList) { patient ->
-                    PatientItem(
-                        patient = patient,
-                        onItemClick = { onItemClick(patient.patientId) },
-                        onDeleteConfirm = { viewModel.deletePatient(patient) }
-                    )
-                }
+        }
+    ) {
+        Scaffold(
+            topBar = {
+                ListAppBar(
+                    onMenuClick = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
+                )
+            },
+            floatingActionButton = {
+                ListFab(onFabClick = { onFabClick(true) })
             }
-            // Empty list message
-            if (patientList.isEmpty() && !viewModel.isLoading) {
-                Box(
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                // Search text field
+                OutlinedTextField(
                     modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    value = searchQuery,
+                    onValueChange = { viewModel.onSearchQueryChange(it) },
+                    label = { Text(text = "Search Patient") },
+                    singleLine = true,
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = "Search Icon"
+                        )
+                    }
+                )
+                // Patient list
+                LazyColumn(
+                    contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Text(
-                        text = "Add Patients Details\nby pressing add button.",
-                        style = MaterialTheme.typography.h6,
-                        textAlign = TextAlign.Center
-                    )
+                    items(patientList) { patient ->
+                        PatientItem(
+                            patient = patient,
+                            onItemClick = { onItemClick(patient.patientId, false) },
+                            onDeleteConfirm = { viewModel.deletePatient(patient) }
+                        )
+                    }
+                }
+                // Empty list message
+                if (patientList.isEmpty() && !viewModel.isLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Add Patients Details\nby pressing add button.",
+                            style = MaterialTheme.typography.h6,
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
         }
@@ -102,13 +139,21 @@ fun PatientListScreen(
 
 // Top app bar
 @Composable
-fun ListAppBar() {
+fun ListAppBar(onMenuClick: () -> Unit) {
     TopAppBar(
         title = {
             Text(
                 text = "PatientEase!",
                 style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
             )
+        },
+        navigationIcon = {
+            IconButton(onClick = onMenuClick) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Open Drawer"
+                )
+            }
         }
     )
 }
@@ -126,10 +171,4 @@ fun ListFab(
             contentDescription = "Add Patient Button"
         )
     }
-}
-
-@Preview
-@Composable
-fun PatientListScreenPrev() {
-    ListAppBar()
 }
