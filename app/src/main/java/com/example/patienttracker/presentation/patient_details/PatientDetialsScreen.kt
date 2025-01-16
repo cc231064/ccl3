@@ -7,7 +7,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -44,7 +45,7 @@ fun PatientDetailsScreen(
             when(event) {
                 PatientDetailsViewModel.UiEvent.SaveNote -> {
                     onSuccessfulSaving()
-                    Toast.makeText(context, "Successfully Save", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Successfully Saved", Toast.LENGTH_SHORT).show()
                 }
                 is PatientDetailsViewModel.UiEvent.ShowToast -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
@@ -53,17 +54,23 @@ fun PatientDetailsScreen(
         }
     }
 
-    // Request focus on the first text field
-    LaunchedEffect(key1 = Unit) {
-        delay(500)
-        focusRequester.requestFocus()
+    // Request focus on the first text field if in edit mode
+    LaunchedEffect(key1 = viewModel.isEditMode) {
+        if (viewModel.isEditMode) {
+            delay(500)
+            focusRequester.requestFocus()
+        }
     }
 
     val state = viewModel.state
 
     Scaffold(
         topBar = {
-            TopBar(onBackClick = onBackClick)
+            TopBar(
+                onBackClick = onBackClick,
+                isEditMode = viewModel.isEditMode,
+                onEditClick = { viewModel.onAction(PatientDetailsEvent.EditMode) }
+            )
         }
     ) {
         Column(
@@ -84,7 +91,8 @@ fun PatientDetailsScreen(
                 label = { Text(text = "Name") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) })
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) }),
+                enabled = viewModel.isEditMode
             )
             Spacer(modifier = Modifier.height(10.dp))
             // Age and gender row
@@ -102,7 +110,8 @@ fun PatientDetailsScreen(
                     label = { Text(text = "Age") },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) })
+                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) }),
+                    enabled = viewModel.isEditMode
                 )
 
                 Spacer(modifier = Modifier.width(10.dp))
@@ -112,14 +121,16 @@ fun PatientDetailsScreen(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Male",
                     selected = state.gender == 1,
-                    onClick = { viewModel.onAction(PatientDetailsEvent.SelectedMale) }
+                    onClick = { if (viewModel.isEditMode) viewModel.onAction(PatientDetailsEvent.SelectedMale) },
+                    enabled = viewModel.isEditMode
                 )
                 // Female radio button
                 RadioGroup(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Female",
                     selected = state.gender == 2,
-                    onClick = { viewModel.onAction(PatientDetailsEvent.SelectedFemale) }
+                    onClick = { if (viewModel.isEditMode) viewModel.onAction(PatientDetailsEvent.SelectedFemale) },
+                    enabled = viewModel.isEditMode
                 )
             }
 
@@ -139,7 +150,8 @@ fun PatientDetailsScreen(
                 ),
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Next) }
-                )
+                ),
+                enabled = viewModel.isEditMode
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -153,7 +165,8 @@ fun PatientDetailsScreen(
                 label = { Text(text = "Assigned Doctor's Name") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) })
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Next) }),
+                enabled = viewModel.isEditMode
             )
             Spacer(modifier = Modifier.height(10.dp))
             // Prescription text field
@@ -166,19 +179,24 @@ fun PatientDetailsScreen(
                     viewModel.onAction(PatientDetailsEvent.EnteredPrescription(newValue))
                 },
                 label = { Text(text = "Prescription") },
+                enabled = viewModel.isEditMode
             )
             Spacer(modifier = Modifier.height(10.dp))
             // Save button
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = {  val weight = state.weight.toIntOrNull() ?: 0
-                    viewModel.onAction(PatientDetailsEvent.SaveButton(weight)) }
-            ) {
-                Text(
-                    text = "Save",
-                    style = MaterialTheme.typography.h6,
-                    color = Color.White
-                )
+            if (viewModel.isEditMode) {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        val weight = state.weight.toIntOrNull() ?: 0
+                        viewModel.onAction(PatientDetailsEvent.SaveButton(weight))
+                    }
+                ) {
+                    Text(
+                        text = "Save",
+                        style = MaterialTheme.typography.h6,
+                        color = Color.White
+                    )
+                }
             }
         }
     }
@@ -187,21 +205,33 @@ fun PatientDetailsScreen(
 // Top app bar
 @Composable
 fun TopBar(
-    onBackClick: () -> Unit
-) {
+    onBackClick: () -> Unit,
+    isEditMode: Boolean,
+    onEditClick: () -> Unit
+){
     TopAppBar(
         title = {
             Text(
-                text = "Patient's Details Screen",
+                text = if (isEditMode) "Edit Patient Details" else "Patient Details",
                 style = MaterialTheme.typography.h5
             )
         },
         navigationIcon = {
             IconButton(onClick = onBackClick) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back"
                 )
+            }
+        },
+        actions = {
+            if (!isEditMode) {
+                IconButton(onClick = onEditClick) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "Edit"
+                    )
+                }
             }
         }
     )
@@ -213,7 +243,8 @@ private fun RadioGroup(
     modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    enabled: Boolean
 ) {
     Row(
         modifier = modifier.clickable { onClick() },

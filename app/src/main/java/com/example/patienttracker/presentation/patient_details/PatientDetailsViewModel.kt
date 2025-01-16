@@ -20,10 +20,11 @@ import javax.inject.Inject
 class PatientDetailsViewModel @Inject constructor(
     private val repository: PatientRepository, // Repository for patient data
     private val savedStateHandle: SavedStateHandle // Handle to save and retrieve state
-): ViewModel() {
+) : ViewModel() {
 
     // State to hold the UI data for the patient details screen
     var state by mutableStateOf(PatientDetailsUiState())
+        private set
 
     // Shared flow to emit UI events (like showing a toast or navigating)
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -32,14 +33,20 @@ class PatientDetailsViewModel @Inject constructor(
     // Variable to hold the current patient ID
     private var currentPatientId: Int? = null
 
+    // Flag to indicate if the screen is in edit mode
+    var isEditMode by mutableStateOf(false)
+        private set
+
     // Initialize the ViewModel by fetching patient details
     init {
+        val isNewPatient = savedStateHandle.get<Boolean>("isNewPatient") ?: false
+        isEditMode = isNewPatient
         fetchPatientDetails()
     }
 
     // Function to handle UI actions
     fun onAction(event: PatientDetailsEvent) {
-        when(event) {
+        when (event) {
             // Update the name in the state
             is PatientDetailsEvent.EnteredName -> {
                 state = state.copy(name = event.name)
@@ -53,7 +60,7 @@ class PatientDetailsViewModel @Inject constructor(
             is PatientDetailsEvent.EnteredWeight -> {
                 state = state.copy(weight = event.weight)
             }
-// Update the assigned doctor in the state
+            // Update the assigned doctor in the state
             is PatientDetailsEvent.EnteredAssignedDoctor -> {
                 state = state.copy(doctorAssigned = event.doctor)
             }
@@ -83,6 +90,9 @@ class PatientDetailsViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+            PatientDetailsEvent.EditMode -> {
+                isEditMode = true
             }
         }
     }
@@ -144,7 +154,7 @@ class PatientDetailsViewModel @Inject constructor(
     // Sealed class to represent UI events
     sealed class UiEvent {
         // Data class to represent a show toast event
-        data class ShowToast(val message: String): UiEvent()
+        data class ShowToast(val message: String) : UiEvent()
         // Object to represent a save note event
         object SaveNote : UiEvent()
     }
@@ -152,4 +162,4 @@ class PatientDetailsViewModel @Inject constructor(
 }
 
 // Custom exception for text field validation
-class TextFieldException(message: String?): Exception(message)
+class TextFieldException(message: String?) : Exception(message)

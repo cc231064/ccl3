@@ -10,4 +10,5 @@ sealed class PatientDetailsEvent {
     data class SaveButton(val weight: Int) : PatientDetailsEvent()
     object SelectedMale: PatientDetailsEvent()
     object SelectedFemale: PatientDetailsEvent()
+    object EditMode: PatientDetailsEvent()
 }

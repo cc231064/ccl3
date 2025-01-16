@@ -29,12 +29,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.patienttracker.util.Constants.PATIENT_DETAILS_ARGUMENT_KEY
 
 // Patient list screen
 @Composable
 fun PatientListScreen(
-    onFabClick: () -> Unit,
-    onItemClick: (Int?) -> Unit,
+    onFabClick: (Boolean) -> Unit,
+    onItemClick: (Int?, Boolean) -> Unit,
     viewModel: PatientListViewModel = hiltViewModel()
 ) {
 
@@ -44,7 +45,7 @@ fun PatientListScreen(
     Scaffold(
         topBar = { ListAppBar() },
         floatingActionButton = {
-            ListFab(onFabClick = onFabClick)
+            ListFab(onFabClick = { onFabClick(true) })
         }
     ) { paddingValues ->
         Column(
@@ -77,7 +78,7 @@ fun PatientListScreen(
                 items(patientList) { patient ->
                     PatientItem(
                         patient = patient,
-                        onItemClick = { onItemClick(patient.patientId) },
+                        onItemClick = { onItemClick(patient.patientId, false) },
                         onDeleteConfirm = { viewModel.deletePatient(patient) }
                     )
                 }
