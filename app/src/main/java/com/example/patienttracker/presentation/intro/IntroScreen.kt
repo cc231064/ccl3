@@ -29,7 +29,7 @@ fun IntroScreen(onContinueClick: () -> Unit) {
                 withStyle(
                     style = SpanStyle(
                         fontWeight = FontWeight.Bold,
-                        color = Color.Blue
+                        color = Color(0xFF246EE9)
                     )
                 ) {
                     append("PatientEase!")
@@ -48,7 +48,7 @@ fun IntroScreen(onContinueClick: () -> Unit) {
         Button(
             onClick = onContinueClick,
             colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color.Blue,
+                backgroundColor = Color(0xFF246EE9),
                 contentColor = Color.White
             )
         ) {
