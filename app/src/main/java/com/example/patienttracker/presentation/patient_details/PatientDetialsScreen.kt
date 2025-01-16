@@ -64,6 +64,7 @@ fun PatientDetailsScreen(
 
     val state = viewModel.state
 
+    // Main content of the screen
     Scaffold(
         topBar = {
             TopBar(
@@ -121,16 +122,14 @@ fun PatientDetailsScreen(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Male",
                     selected = state.gender == 1,
-                    onClick = { if (viewModel.isEditMode) viewModel.onAction(PatientDetailsEvent.SelectedMale) },
-                    enabled = viewModel.isEditMode
+                    onClick = { if (viewModel.isEditMode) viewModel.onAction(PatientDetailsEvent.SelectedMale) }
                 )
                 // Female radio button
                 RadioGroup(
                     modifier = Modifier.padding(horizontal = 10.dp),
                     text = "Female",
                     selected = state.gender == 2,
-                    onClick = { if (viewModel.isEditMode) viewModel.onAction(PatientDetailsEvent.SelectedFemale) },
-                    enabled = viewModel.isEditMode
+                    onClick = { if (viewModel.isEditMode) viewModel.onAction(PatientDetailsEvent.SelectedFemale) }
                 )
             }
 
@@ -243,8 +242,7 @@ private fun RadioGroup(
     modifier: Modifier = Modifier,
     text: String,
     selected: Boolean,
-    onClick: () -> Unit,
-    enabled: Boolean
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier.clickable { onClick() },

@@ -13,9 +13,9 @@ import com.example.patienttracker.util.Constants.PATIENT_DETAILS_ARGUMENT_KEY
 
 // Defines the navigation routes
 sealed class Screen(val route: String) {
-    object Intro : Screen("intro_screen")
-    object PatientList : Screen("patient_list_screen")
-    object PatientDetails : Screen(
+    data object Intro : Screen("intro_screen")
+    data object PatientList : Screen("patient_list_screen")
+    data object PatientDetails : Screen(
         "patient_details_screen?$PATIENT_DETAILS_ARGUMENT_KEY=" +
                 "{$PATIENT_DETAILS_ARGUMENT_KEY}&isNewPatient={isNewPatient}"
     ) {

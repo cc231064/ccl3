@@ -156,7 +156,7 @@ class PatientDetailsViewModel @Inject constructor(
         // Data class to represent a show toast event
         data class ShowToast(val message: String) : UiEvent()
         // Object to represent a save note event
-        object SaveNote : UiEvent()
+        data object SaveNote : UiEvent()
     }
 
 }
