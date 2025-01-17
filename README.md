@@ -2,15 +2,20 @@
 
 *Onyirioha Augustine, Hick Manuela*
 
-Introduction
+Introduction 
 
-Patients might Forget for what they are supposed to use Medicine for if they have multiple to Keep track of off ( Maybe some due to chronical illness, or needing different Medicine to Cure illness)
-Our app solves this by securely organizing prescriptions as well as being able to add personal information in one easy-to-use platform with real-time updates and smart reporting.
+Hospitals and healthcare providers often struggle to manage patient records, doctor assignments, and prescriptions, leading to delays and errors in care. 
 
-Use Case
+Our app solves this by securely organizing patient data, doctor details, and prescriptions in one easy-to-use platform with real-time updates and smart reporting. 
 
-A Person who has to take multiple Medicine can have an easier overview for what the Name of the Medicine is and for what they have to take it as well as from which doctor it was prescribed from.
+Goal 
 
-Goal
+The goal of this app is to help hospitals and healthcare providers efficiently track patients, their assigned doctors, and prescribed medications. By offering a secure and user-friendly system, the app ensures accurate record-keeping and improves the overall management of patient care. 
 
-The goal of this app is to help people Keep track of their prescribed medications. By offering a secure and user-friendly system, the app ensures accurate record-keeping and improves the overall management of ones medicine.
+Target Users 
+
+This app is designed for medical receptionists, hospital administrators, doctors, and healthcare providers. It supports staff in managing patient information, streamlining doctor assignments, and tracking prescriptions to improve overall efficiency and patient care. 
+
+Use Case 
+
+A medical receptionist can easily register new patients, assign them to available doctors, and log their prescriptions. This streamlined process reduces paperwork, minimizes errors, and ensures doctors have real-time access to patient information for better care. 
