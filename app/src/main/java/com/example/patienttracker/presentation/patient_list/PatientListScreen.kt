@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -36,10 +37,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
+import androidx.navigation.NavHostController
+import com.example.patienttracker.navigation.Screen
 
 // Patient list screen
 @Composable
 fun PatientListScreen(
+    navController: NavHostController, // Add this parameter
     onFabClick: (Boolean) -> Unit,
     onItemClick: (Int?, Boolean) -> Unit,
     viewModel: PatientListViewModel = hiltViewModel()
@@ -82,7 +86,8 @@ fun PatientListScreen(
             floatingActionButton = {
                 ListFab(onFabClick = { onFabClick(true) })
             }
-        ) { paddingValues ->
+        )
+        { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -104,6 +109,11 @@ fun PatientListScreen(
                         )
                     }
                 )
+
+                Button(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
+                    Text("Go to Profile")
+                }
+
                 // Patient list
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 16.dp),
