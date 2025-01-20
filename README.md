@@ -21,4 +21,5 @@ Use Case
 A medical receptionist can easily register new patients, assign them to available doctors, and log their prescriptions. This streamlined process reduces paperwork, minimizes errors, and ensures doctors have real-time access to patient information for better care. 
 
 
-https://fhstp-my.sharepoint.com/:w:/g/personal/cc231027_fhstp_ac_at/EeHkBnP7ujVKgZPMi18xElIBX6JJAkGai7FcizeuPTI56g?e=c7Qmaj
+
+[Usability Test Plan for PatienEase.pdf](https://github.com/user-attachments/files/18475573/Usability.Test.Plan.for.PatienEase.pdf)
