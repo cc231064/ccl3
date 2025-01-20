@@ -1,5 +1,6 @@
 package com.example.patienttracker.presentation.patient_list
 
+import android.util.Log
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -28,7 +29,10 @@ fun DeleteDialog(
             )
         },
         confirmButton = {
-            TextButton(onClick = confirmButtonClicked) {
+            TextButton(onClick = {
+                confirmButtonClicked()
+                onDialogDismiss()
+            }) {
                 Text(text = "Yes")
             }
         },
@@ -39,4 +43,8 @@ fun DeleteDialog(
         },
         onDismissRequest = onDialogDismiss
     )
+}
+
+fun deleteThePatient() {
+    Log.d("DeleteDialog", "deleteThePatient: called")
 }
