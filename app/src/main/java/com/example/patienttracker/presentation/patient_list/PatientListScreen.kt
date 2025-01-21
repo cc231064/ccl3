@@ -23,6 +23,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
 import androidx.navigation.NavHostController
 import com.example.patienttracker.navigation.Screen
@@ -80,7 +82,8 @@ fun PatientListScreen(
                         scope.launch {
                             drawerState.open()
                         }
-                    }
+                    },
+                    navController = navController
                 )
             },
             floatingActionButton = {
@@ -93,8 +96,6 @@ fun PatientListScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                Button(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
-                    Text("Go to Profile")
                 }
                 // Search text field
                 OutlinedTextField(
@@ -144,11 +145,11 @@ fun PatientListScreen(
             }
         }
     }
-}
+
 
 // Top app bar
 @Composable
-fun ListAppBar(onMenuClick: () -> Unit) {
+fun ListAppBar(onMenuClick: () -> Unit, navController: NavController) {
     TopAppBar(
         title = {
             Text(
@@ -161,6 +162,14 @@ fun ListAppBar(onMenuClick: () -> Unit) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Open Drawer"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
+                Icon(
+                    imageVector = Icons.Filled.Person, // Use the appropriate icon for a profile
+                    contentDescription = "Go to Profile"
                 )
             }
         }
