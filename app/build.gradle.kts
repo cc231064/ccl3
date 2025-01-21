@@ -57,6 +57,9 @@ dependencies {
     val room_version = "2.6.1"
     val hilt_version = "2.48.1" // Updated Hilt version*/
 
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation(platform(libs.androidx.compose.bom))
+
     implementation(libs.androidx.core.ktx.v170)
     implementation(libs.androidx.lifecycle.runtime.ktx.v231)
     implementation(libs.androidx.activity.compose.v131)
@@ -91,4 +94,6 @@ dependencies {
 
     //System Ui Color
     implementation(libs.accompanist.systemuicontroller)
+
+
 }

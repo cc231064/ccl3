@@ -10,4 +10,5 @@ object Constants {
     const val PATIENT_DATABASE = "patient_db"
 
     const val PROFILE_TABLE = "profile_table"
+    const val PROFILE_DATABASE = "profile_db"
 }

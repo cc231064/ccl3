@@ -1,6 +1,8 @@
 package com.example.patienttracker.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -9,7 +11,14 @@ import androidx.navigation.navArgument
 import com.example.patienttracker.presentation.intro.IntroScreen
 import com.example.patienttracker.presentation.patient_details.PatientDetailsScreen
 import com.example.patienttracker.presentation.patient_list.PatientListScreen
+import com.example.patienttracker.presentation.profile.ProfileData
+import com.example.patienttracker.presentation.profile.ProfileScreen
+import com.example.patienttracker.presentation.profile.ProfileViewModel
 import com.example.patienttracker.util.Constants.PATIENT_DETAILS_ARGUMENT_KEY
+import androidx.compose.runtime.getValue
+import com.example.patienttracker.domain.model.Profile
+import com.example.patienttracker.presentation.profile.EditProfileScreen
+import toProfile
 
 // Defines the navigation routes
 sealed class Screen(val route: String) {
@@ -23,6 +32,8 @@ sealed class Screen(val route: String) {
             return "patient_details_screen?$PATIENT_DETAILS_ARGUMENT_KEY=$patientId&isNewPatient=$isNewPatient"
         }
     }
+    data object ProfileScreen : Screen("profile")
+    data object EditProfile : Screen("EditProfile")
 }
 
 // Sets up the navigation graph
@@ -30,6 +41,7 @@ sealed class Screen(val route: String) {
 fun NavGraphSetup(
     navController: NavHostController // Navigation controller
 ) {
+    val viewModel = hiltViewModel<ProfileViewModel>()
     NavHost(
         navController = navController,
         startDestination = Screen.Intro.route // Start with IntroScreen
@@ -44,13 +56,19 @@ fun NavGraphSetup(
         }
         composable(route = Screen.PatientList.route) {
             PatientListScreen(
+                navController = navController,
                 onFabClick = { isNewPatient ->
                     // Navigate to PatientDetailsScreen for a new patient
                     navController.navigate(Screen.PatientDetails.passPatientId(isNewPatient = isNewPatient))
                 },
                 onItemClick = { patientId, isNewPatient ->
                     // Navigate to PatientDetailsScreen with patient ID
-                    navController.navigate(Screen.PatientDetails.passPatientId(patientId, isNewPatient))
+                    navController.navigate(
+                        Screen.PatientDetails.passPatientId(
+                            patientId,
+                            isNewPatient
+                        )
+                    )
                 }
             )
         }
@@ -72,5 +90,42 @@ fun NavGraphSetup(
                 onSuccessfulSaving = { navController.navigateUp() }
             )
         }
-    }
-}
+        composable(route = Screen.ProfileScreen.route) {
+
+            ProfileScreen(
+                navController = navController,
+                onBackClick = { navController.navigateUp() },
+                onEditClick = { navController.navigate(Screen.EditProfile.route) },
+                viewModel = viewModel
+            )
+        }
+        composable(route = Screen.EditProfile.route) {
+
+            val profile by viewModel.profile.collectAsState(
+                initial = Profile(
+                    1,
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                )
+            )
+
+            EditProfileScreen(
+                navController = navController,
+                profileData = profile ?: Profile(
+                    1,
+                    "Default Name",
+                    "Default Email",
+                    "Default Phone",
+                    "Default Address",
+                    "Default Info"
+                ), // Handle null case
+                onSaveClick = { updatedProfile ->
+                    viewModel.saveProfile(updatedProfile) // Save the profile data
+                    navController.navigateUp() // Navigate back after saving
+                }
+            )
+        }
+    }}

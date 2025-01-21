@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
@@ -22,6 +23,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -35,11 +37,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import kotlinx.coroutines.launch
+import androidx.navigation.NavHostController
+import com.example.patienttracker.navigation.Screen
 
 // Patient list screen
 @Composable
 fun PatientListScreen(
+    navController: NavHostController, // Add this parameter
     onFabClick: (Boolean) -> Unit,
     onItemClick: (Int?, Boolean) -> Unit,
     viewModel: PatientListViewModel = hiltViewModel()
@@ -76,23 +82,26 @@ fun PatientListScreen(
                         scope.launch {
                             drawerState.open()
                         }
-                    }
+                    },
+                    navController = navController
                 )
             },
             floatingActionButton = {
                 ListFab(onFabClick = { onFabClick(true) })
             }
-        ) { paddingValues ->
+        )
+        { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
+                }
                 // Search text field
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(10.dp),
                     value = searchQuery,
                     onValueChange = { viewModel.onSearchQueryChange(it) },
                     label = { Text(text = "Search Patient") },
@@ -104,6 +113,7 @@ fun PatientListScreen(
                         )
                     }
                 )
+
                 // Patient list
                 LazyColumn(
                     contentPadding = PaddingValues(horizontal = 16.dp),
@@ -135,11 +145,11 @@ fun PatientListScreen(
             }
         }
     }
-}
+
 
 // Top app bar
 @Composable
-fun ListAppBar(onMenuClick: () -> Unit) {
+fun ListAppBar(onMenuClick: () -> Unit, navController: NavController) {
     TopAppBar(
         title = {
             Text(
@@ -152,6 +162,14 @@ fun ListAppBar(onMenuClick: () -> Unit) {
                 Icon(
                     imageVector = Icons.Filled.Menu,
                     contentDescription = "Open Drawer"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
+                Icon(
+                    imageVector = Icons.Filled.Person, // Use the appropriate icon for a profile
+                    contentDescription = "Go to Profile"
                 )
             }
         }
