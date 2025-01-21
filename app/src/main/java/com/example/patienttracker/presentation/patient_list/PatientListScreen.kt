@@ -96,7 +96,6 @@ fun PatientListScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
-                }
                 // Search text field
                 OutlinedTextField(
                     modifier = Modifier
@@ -128,6 +127,7 @@ fun PatientListScreen(
                         )
                     }
                 }
+
                 // Empty list message
                 if (patientList.isEmpty() && !viewModel.isLoading) {
                     Box(
@@ -143,6 +143,7 @@ fun PatientListScreen(
                     }
                 }
             }
+        }
         }
     }
 
