@@ -15,10 +15,10 @@ fun ProfilePage(
 
     profile?.let {
         Text("Name: ${it.name}")
-        Text("Age: ${it.age}")
-        Text("Gender: ${it.gender}")
-        Text("Weight: ${it.weight}")
-        Text("Height: ${it.height}")
+        Text("Email: ${it.email}")
+        Text("Phone: ${it.phone}")
+        Text("Address: ${it.address}")
+        Text("Further Info: ${it.someOtherField}")
     } ?: run {
         Text("No profile found")
 

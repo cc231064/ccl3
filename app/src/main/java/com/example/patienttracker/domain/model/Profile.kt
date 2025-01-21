@@ -6,11 +6,11 @@ import com.example.patienttracker.util.Constants.PROFILE_TABLE
 
 @Entity(tableName = PROFILE_TABLE)
 data class Profile(
-    val name: String,
-    val age: String,
-    val gender: Int,
-    val weight: String,
-    val height: String,
     @PrimaryKey(autoGenerate = true)
-    val profileId: Int? = null
+    val profileId: Int = 0,
+    val name: String,
+    val email: String,
+    val phone: String,
+    val address: String,
+    val someOtherField: String
 )

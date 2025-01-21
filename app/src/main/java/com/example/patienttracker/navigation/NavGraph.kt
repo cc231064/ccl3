@@ -1,7 +1,6 @@
 package com.example.patienttracker.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -16,10 +15,10 @@ import com.example.patienttracker.presentation.profile.ProfileData
 import com.example.patienttracker.presentation.profile.ProfileScreen
 import com.example.patienttracker.presentation.profile.ProfileViewModel
 import com.example.patienttracker.util.Constants.PATIENT_DETAILS_ARGUMENT_KEY
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlin.coroutines.CoroutineContext
+import com.example.patienttracker.domain.model.Profile
+import com.example.patienttracker.presentation.profile.EditProfileScreen
+import toProfile
 
 // Defines the navigation routes
 sealed class Screen(val route: String) {
@@ -34,6 +33,7 @@ sealed class Screen(val route: String) {
         }
     }
     data object ProfileScreen : Screen("profile")
+    data object EditProfile : Screen("EditProfile")
 }
 
 // Sets up the navigation graph
@@ -41,6 +41,7 @@ sealed class Screen(val route: String) {
 fun NavGraphSetup(
     navController: NavHostController // Navigation controller
 ) {
+    val viewModel = hiltViewModel<ProfileViewModel>()
     NavHost(
         navController = navController,
         startDestination = Screen.Intro.route // Start with IntroScreen
@@ -90,10 +91,20 @@ fun NavGraphSetup(
             )
         }
         composable(route = Screen.ProfileScreen.route) {
-            val viewModel = hiltViewModel<ProfileViewModel>()
-            val profileData by viewModel.profileData.collectAsState(
-                initial = ProfileData(
-                    "Default Name",
+
+            ProfileScreen(
+                navController = navController,
+                onBackClick = { navController.navigateUp() },
+                onEditClick = { navController.navigate(Screen.EditProfile.route) },
+                viewModel = viewModel
+            )
+        }
+        composable(route = Screen.EditProfile.route) {
+
+            val profile by viewModel.profile.collectAsState(
+                initial = Profile(
+                    1,
+                    "",
                     "",
                     "",
                     "",
@@ -101,11 +112,20 @@ fun NavGraphSetup(
                 )
             )
 
-            ProfileScreen(
+            EditProfileScreen(
                 navController = navController,
-                profileData = profileData, onBackClick = { navController.navigateUp() }
+                profileData = profile ?: Profile(
+                    1,
+                    "Default Name",
+                    "Default Email",
+                    "Default Phone",
+                    "Default Address",
+                    "Default Info"
+                ), // Handle null case
+                onSaveClick = { updatedProfile ->
+                    viewModel.saveProfile(updatedProfile) // Save the profile data
+                    navController.navigateUp() // Navigate back after saving
+                }
             )
         }
-
-    }
-}
+    }}

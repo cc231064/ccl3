@@ -6,7 +6,7 @@ import com.example.patienttracker.domain.model.Profile
 
 @Database(
     entities = [Profile::class],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
 abstract class ProfileDatabase : RoomDatabase() {

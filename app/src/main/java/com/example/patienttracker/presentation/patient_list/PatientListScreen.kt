@@ -93,11 +93,14 @@ fun PatientListScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
+                Button(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
+                    Text("Go to Profile")
+                }
                 // Search text field
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(10.dp),
                     value = searchQuery,
                     onValueChange = { viewModel.onSearchQueryChange(it) },
                     label = { Text(text = "Search Patient") },
@@ -109,10 +112,6 @@ fun PatientListScreen(
                         )
                     }
                 )
-
-                Button(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
-                    Text("Go to Profile")
-                }
 
                 // Patient list
                 LazyColumn(

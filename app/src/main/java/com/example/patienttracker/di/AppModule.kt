@@ -15,6 +15,8 @@ import javax.inject.Singleton
 import com.example.patienttracker.data.local.PatientMigrations
 import com.example.patienttracker.data.local.ProfileDao
 import com.example.patienttracker.data.local.ProfileDatabase
+import com.example.patienttracker.data.repository.ProfileRepositoryImpl
+import com.example.patienttracker.domain.repository.ProfileRepository
 import com.example.patienttracker.util.Constants.PROFILE_DATABASE
 import dagger.hilt.android.qualifiers.ApplicationContext
 
@@ -65,12 +67,22 @@ object AppModule {
             return Room.databaseBuilder(
                 context.applicationContext,
                 ProfileDatabase::class.java,
-                "app_database"
-            ).build()
+                PROFILE_DATABASE
+            ).fallbackToDestructiveMigration()
+                .build()
         }
 
         @Provides
         fun provideProfileDao(database: ProfileDatabase): ProfileDao {
             return database.profileDao()
         }
+
+        @Provides
+        @Singleton
+        fun provideProfileRepository(
+            db: ProfileDatabase
+        ): ProfileRepository {
+            return ProfileRepositoryImpl(db.profileDao())
+        }
     }
+
