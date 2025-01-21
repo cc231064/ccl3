@@ -17,6 +17,7 @@ import com.example.patienttracker.presentation.profile.ProfileScreen
 import com.example.patienttracker.presentation.profile.ProfileViewModel
 import com.example.patienttracker.util.Constants.PATIENT_DETAILS_ARGUMENT_KEY
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlin.coroutines.CoroutineContext
 
@@ -61,7 +62,12 @@ fun NavGraphSetup(
                 },
                 onItemClick = { patientId, isNewPatient ->
                     // Navigate to PatientDetailsScreen with patient ID
-                    navController.navigate(Screen.PatientDetails.passPatientId(patientId, isNewPatient))
+                    navController.navigate(
+                        Screen.PatientDetails.passPatientId(
+                            patientId,
+                            isNewPatient
+                        )
+                    )
                 }
             )
         }
@@ -85,13 +91,21 @@ fun NavGraphSetup(
         }
         composable(route = Screen.ProfileScreen.route) {
             val viewModel = hiltViewModel<ProfileViewModel>()
-            val profileData by viewModel.profileData.collectAsState(initial = ProfileData("Default Name", "", "", "", ""))
+            val profileData by viewModel.profileData.collectAsState(
+                initial = ProfileData(
+                    "Default Name",
+                    "",
+                    "",
+                    "",
+                    ""
+                )
+            )
 
             ProfileScreen(
                 navController = navController,
-                profileData = profileData ?: ProfileData("Default Name", "", "", "", "")
+                profileData = profileData, onBackClick = { navController.navigateUp() }
             )
         }
+
     }
 }
-

@@ -18,7 +18,8 @@ class ProfileViewModel @Inject constructor(
     private val profileDao: ProfileDao
 ) : ViewModel() {
 
-    val profileData = mutableStateOf<ProfileData?>(null)
+    private val _profileData = MutableStateFlow(ProfileData("Default Name", "", "", "", ""))
+    val profileData: StateFlow<ProfileData> get() = _profileData
 
     private val _profile = MutableStateFlow<Profile?>(null)
     val profile: StateFlow<Profile?> = _profile.asStateFlow()

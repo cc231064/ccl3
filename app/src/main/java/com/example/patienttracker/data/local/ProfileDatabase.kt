@@ -12,3 +12,4 @@ import com.example.patienttracker.domain.model.Profile
 abstract class ProfileDatabase : RoomDatabase() {
     abstract fun profileDao(): ProfileDao
 }
+
