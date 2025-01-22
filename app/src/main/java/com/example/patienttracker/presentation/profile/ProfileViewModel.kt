@@ -1,5 +1,6 @@
 package com.example.patienttracker.presentation.profile
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.patienttracker.data.local.ProfileDao
@@ -31,6 +32,7 @@ class ProfileViewModel @Inject constructor(
     private fun loadProfile(profileId: Int) {
         viewModelScope.launch {
             val loadedProfile = profileDao.getProfileById(profileId)
+            Log.d("ProfileViewModel", "Loaded Profile: $loadedProfile")
             _profile.value = loadedProfile
             // Update _profileData if loadedProfile is not null
             loadedProfile?.let {

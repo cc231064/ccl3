@@ -66,7 +66,21 @@ fun ProfileScreen(
                 }
             } ?: run {
                 // Handle the case where the profile is null
-                Text("No profile data available.")
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = "No profile data available.", style = MaterialTheme.typography.h6)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(text = "Please create a new profile to get started.")
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = onEditClick,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text("Create Profile")
+                    }
+                }
             }
         }
     }
