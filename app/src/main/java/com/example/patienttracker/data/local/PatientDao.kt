@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 // DAO interface for patient data access
 @Dao
 interface PatientDao {
-
     // Insert or update a patient
     @Upsert
     suspend fun addOrUpdatePatient(patient: Patient)
