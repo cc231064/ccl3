@@ -21,10 +21,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -147,7 +149,6 @@ fun PatientListScreen(
         }
     }
 
-
 // Top app bar
 @Composable
 fun ListAppBar(onMenuClick: () -> Unit, navController: NavController) {
@@ -161,15 +162,15 @@ fun ListAppBar(onMenuClick: () -> Unit, navController: NavController) {
         navigationIcon = {
             IconButton(onClick = onMenuClick) {
                 Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = "Open Drawer"
+                    imageVector = Icons.AutoMirrored.Filled.Sort, // Changed to Sort icon
+                    contentDescription = "Open Sort Options" // Updated content description
                 )
             }
         },
         actions = {
             IconButton(onClick = { navController.navigate(Screen.ProfileScreen.route) }) {
                 Icon(
-                    imageVector = Icons.Filled.Person, // Use the appropriate icon for a profile
+                    imageVector = Icons.Filled.Person,
                     contentDescription = "Go to Profile"
                 )
             }
