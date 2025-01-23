@@ -22,3 +22,5 @@ A medical receptionist can easily register new patients, assign them to availabl
 
 
 [Usability Test Plan for PatienEase.pdf](https://github.com/user-attachments/files/18475626/Usability.Test.Plan.for.PatienEase.pdf)
+
+https://github.com/cc231064/ccl3/blob/master/app-debug.apk
