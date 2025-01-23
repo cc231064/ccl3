@@ -1,4 +1,4 @@
-**CCL App Concept**
+**CCL App Concept - PatientEase!**
 
 *Onyirioha Augustine, Hick Manuela*
 
