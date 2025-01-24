@@ -128,4 +128,5 @@ fun NavGraphSetup(
                 }
             )
         }
-    }}
+    }
+}
