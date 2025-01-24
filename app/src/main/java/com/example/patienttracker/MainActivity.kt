@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.example.patienttracker.navigation.NavGraphSetup
-import com.example.patienttracker.presentation.ui.theme.PatientTrackerTheme
+import com.example.patienttracker.presentation.ui.theme.PatientEaseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 // Main activity of the app
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PatientTrackerTheme {
+            PatientEaseTheme {
                 // Create a NavController for navigation
                 val navController = rememberNavController()
                 // Set up the navigation graph
