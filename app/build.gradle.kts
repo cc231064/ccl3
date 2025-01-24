@@ -53,9 +53,6 @@ android {
 }
 
 dependencies {
-    /*val compose_ui_version = "1.5.4"
-    val room_version = "2.6.1"
-    val hilt_version = "2.48.1" // Updated Hilt version*/
 
     implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
     implementation(platform(libs.androidx.compose.bom))
