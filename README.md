@@ -20,7 +20,11 @@ A medical receptionist can easily register new patients, assign them to availabl
 ## Some important documents
 [Usability Test Plan for PatienEase.pdf](https://github.com/user-attachments/files/18475626/Usability.Test.Plan.for.PatienEase.pdf) <br/>
 [PatientEase Usability Evaluation.pdf](https://github.com/user-attachments/files/18550064/PatientEase.Usability.Evaluation.pdf) <br/>
-[Link to Figma Design and Prototype](https://www.figma.com/design/9lhpMpl72gBjAfgHpo5vKe/CCL3_PatientEase!?node-id=0-1&t=qYh2TAemj9fS51Ky-1)
+[Link to Figma Design and Prototype](https://www.figma.com/design/9lhpMpl72gBjAfgHpo5vKe/CCL3_PatientEase!?node-id=0-1&t=qYh2TAemj9fS51Ky-1) <br/>
+[Final Reflection.pdf](https://github.com/user-attachments/files/18550595/Final.Reflection.pdf) <br/>
+[Präsentation-demo.pdf](https://fhstp-my.sharepoint.com/:p:/r/personal/cc231064_fhstp_ac_at/Documents/Pr%C3%A4sentation.pptx?d=wf88711f4f3164787b2b14488ff46f452&csf=1&web=1&e=37CGSL)
+
+
 
 
 
