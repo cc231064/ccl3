@@ -1,6 +1,6 @@
 # **CCL App Concept - PatientEase!**
 
-*Onyirioha Augustine, Hick Manuela*
+*Onyirioha Augustine, Hick Manuela* <br/>
 https://github.com/cc231064/ccl3/blob/master/app-debug.apk
 
 ## Introduction 
@@ -18,7 +18,7 @@ This app is designed for medical receptionists, hospital administrators, doctors
 A medical receptionist can easily register new patients, assign them to available doctors, and log their prescriptions. This streamlined process reduces paperwork, minimizes errors, and ensures doctors have real-time access to patient information for better care. 
 
 ## Some important documents
-[Usability Test Plan for PatienEase.pdf](https://github.com/user-attachments/files/18475626/Usability.Test.Plan.for.PatienEase.pdf)
+[Usability Test Plan for PatienEase.pdf](https://github.com/user-attachments/files/18475626/Usability.Test.Plan.for.PatienEase.pdf) <br/>
 [PatientEase Usability Evaluation.pdf](https://github.com/user-attachments/files/18550064/PatientEase.Usability.Evaluation.pdf)
 
 
